@@ -56,8 +56,6 @@ var osm = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
         .catch(err => console.error(err));
 
         
-      
-
     function processBusinesses(data) {
         let businesses = data.map((element) => {
             let location = {
