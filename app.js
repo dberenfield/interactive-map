@@ -42,18 +42,19 @@ var osm = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 
       // foursquare 
 
+      const options = {
+        method: 'GET',
+        headers: {
+          accept: 'application/json',
+          Authorization: 'fsq3kUjUgaEqESMuj4omO1ZKurd4I0w/sONToSOJ35gU1L0='
+        }
+      };
+    
       fetch('https://api.foursquare.com/v3/places/search', options)
         .then(response => response.json())
         .then(response => console.log(response))
         .catch(err => console.error(err));
 
-        const options = {
-            method: 'GET',
-            headers: {
-              accept: 'application/json',
-              Authorization: 'fsq3kUjUgaEqESMuj4omO1ZKurd4I0w/sONToSOJ35gU1L0='
-            }
-          };
         
       
 
