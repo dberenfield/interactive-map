@@ -9,19 +9,7 @@ var osm = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 
     var map;
     osm.addTo(map);
-
-      function init() {
-         map = new L.Map('map');
-         L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors',
-            maxZoom: 18
-         }).addTo(map);
-         map.attributionControl.setPrefix(''); 
-  
-        
-         map.setView(new L.LatLng(51.505, -0.09), 13);
-      }
-      
+                
       function onLocationFound(e) {
         var radius = e.accuracy / 2;
         var location = e.latlng
@@ -41,41 +29,46 @@ var osm = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
      }
 
       // foursquare 
-
+    
+     
+      async function getFoursquare(business) {
+      myurl = "https://api.foursquare.com/v3/places/search?query="+business;
+        
       const options = {
         method: 'GET',
         headers: {
           accept: 'application/json',
           Authorization: 'fsq3kUjUgaEqESMuj4omO1ZKurd4I0w/sONToSOJ35gU1L0='
         }
-      };
-    
-      fetch('https://api.foursquare.com/v3/places/search', options)
-        .then(response => response.json())
-        .then(response => console.log(response))
-        .catch(err => console.error(err));
+      };  
+
+      let data = await fetch(myurl, options).then(response => response.json()).catch(err => console.error(err));
+      return(data)
+      }
 
         
+
     function processBusinesses(data) {
-        let businesses = data.map((element) => {
+      console.log(data);
+        let businesses = data.map((element) => {  
             let location = {
                 name: element.name,
                 lat: element.geocodes.main.latitude,
                 long: element.geocodes.main.longitude
-            };
+            };  
             return location
-        })
+        })                                  
         return businesses
-    }
+    }                           
 
 
     document.getElementById('submit').addEventListener('click', async (event) => {
         event.preventDefault()
         let business = document.getElementById('business').value
         let data = await getFoursquare(business)
-        myMap.businesses = processBusinesses(data)
-        myMap.addMarkers()
+        map.businesses = processBusinesses(data)
+        map.addMarkers()
     })
 
-    
+
 
